@@ -9,3 +9,5 @@ excluded_modules: []
 module_config:
   module_value:   "some example value for module usage"
   monkey_file:    "monkey_expr.yml"
+  postlinks_url:            "http://mywebhosthere:55184/api/links"
+  postlinks_accesstoken:    "accesstokenhere"

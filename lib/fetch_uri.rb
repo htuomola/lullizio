@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 require 'uri'
 require 'net/http'
+require 'rest-client'
+require 'json'
 
 def fetch_uri(uri_str, limit = 10)
   raise ArgumentError, 'HTTP redirect too deep' if limit == 0
@@ -37,4 +39,15 @@ def new_location(uri, location)
   uri.query = target.query
   uri.fragment = target.fragment
   return uri.to_s
+end
+
+def post_link(addr, title, user, channel, endpointUri, accessToken)
+	puts "post_link called: address: #{addr} title: #{title}, user: #{user}, channel: #{channel}"
+	jsonData = { Url: addr, User: user, Title: title, Channel: channel}
+	response = RestClient.post endpointUri, jsonData.to_json, { :content_type => :json, :accept => :json, 'Linx-Access-Token' => accessToken}
+	puts "post_link: status code #{response.code}"
+	if response.code != 200
+		puts "post_link: response #{response.to_str}"
+	end
+	response.code == 200 ? JSON.parse(response)["Data"]["Title"] : nil
 end
